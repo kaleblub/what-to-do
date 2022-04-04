@@ -1,34 +1,31 @@
-use std::env;
+use clap::{Arg, Command};
 
 fn main() {
-    // Recieve Arguments in Vector
-    let args: Vec<String> = env::args().collect();
-    // Clone the first argument
-    let command = args[1].clone();
-    println!("Args: {:?}", args);
-    println!("Command: {}", command);
-    
-    /* 
-    Have Multiple commands:
-    -p --print : Print Something I can do
-        option to have an argument to print multiple things, -> Int
-    -P --print-all : Print the whole list of things I can do
-        no argument
-    -a --add : Add a new thing that I can do
-        Argument should have "" around to be entered as string
-    -d --delete : Delete a thing that I can do
-        Argument must be l integer    
-    */
-    if command == "" || command == "-h" || command == "--help" {
-        println!("This is the help screen..");
-    } else if command == "-p" || command == "--print" {
-        println!("Printing a random thing that you can do...");
-    } else if command == "-P" || command == "--print-all" {
-        println!("Printing all things that you can do...");
-    } else if command == "-a" || command == "--add" {
-        println!("");
-    } else if command == "-d" || command == "--delete" {
-        println!("Print options of things to delete");
-        println!("What would you like to delete?");
+    let matches = Command::new("What To Do? (To-do list)")
+        .version("1.0")
+        .author("Kaleb H. <kaleblub.pythonanywhere.com>")
+        .about("CLI to-go list reminder on request.")
+        .subcommand(Command::new("add")
+            .about("Add a new item that needs to be completed eventually.")
+            .version("1.0")
+            .author("Kaleblub <kaleblub.pythonanywhere.com>"))
+        .subcommand(Command::new("delete")
+            .about("Delete an item.")
+            .version("1.0")
+            .author("Kaleblub <kaleblub.pythonanywhere.com>"))
+        .subcommand(Command::new("print-all")
+            .about("Print the whole list of items to do.")
+            .version("1.0")
+            .author("Kaleblub <kaleblub.pythonanywhere.com>"))
+        .get_matches();
+
+
+    // Check for existence of subcommands
+    if let Some(ref matches) = matches.subcommand_matches("add") {
+        println!("Add something");
+    } else if let Some(ref matches) = matches.subcommand_matches("delete") {
+        println!("Delete something")
+    } else if let Some(ref matches) = matches.subcommand_matches("print-all") {
+        println!("Print all.")
     }
 }
